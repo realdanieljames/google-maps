@@ -1,0 +1,76 @@
+.header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: rgb(26, 39, 37);
+    /* background-color: #131921; */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header_logo {
+    width: 100px;
+    object-fit: contain;
+    margin: 0 20px;
+    /* margin-top: 5px; */
+}
+
+.search {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    border-radius: 24px;
+}
+
+.header_searchInput input {
+    height: 12px;
+    padding: 10px;
+    border: none;
+    width: 100%
+}
+
+.locate {
+    /* top: 1rem;
+    right: 1rem; */
+    background: none;
+    display: flex;
+    margin-right: 33vw;
+    background: gold;
+}
+
+.locate img {
+    cursor: pointer;
+    width: 50px;
+    object-fit: contain;
+}
+
+.page_container {
+    display: grid;
+    height: 1000px;
+    grid-template-columns: 66% 33%;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10%;
+    /* grid-template-areas: "map jbl" "map jbl" "map jbl" "map jbl" "map jbl"; */
+    text-align: center;
+    /* width: 100%;
+    box-sizing: border-box;
+    float: left; */
+}
+
+.product_list {
+    grid-row: 1/ 9;
+    grid-column: 2 / 3;
+}
+
+.product {
+    grid-column: 2 / 3;
+    grid-row: 1/ 9;
+}
+
+.map {
+    height: 92vh;
+    grid-column: 1/ 2;
+    grid-row: 1/ 9;
+    border: 2px solid black;
+}
