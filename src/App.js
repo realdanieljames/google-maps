@@ -1,12 +1,14 @@
 import React from "react";
-import key from "./key";
+
+// import key from "./key";
+import {googleMapKey} from "./key";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import { formatRelative } from "date-fns";
+import { formatRelative, set } from "date-fns";
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -21,10 +23,17 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+
 import Home from './Home'
+import Product from "./Product"
 
 
+
+
+console.log(Product)
+
+const product = new Product
+console.log(product)
 
 
 
@@ -36,7 +45,6 @@ const libraries = ["places"];
 const mapContainerStyle = {
 
   height: "92vh",
-   
 };
 
 const center = {
@@ -53,19 +61,23 @@ const options = {
 //==========================================================================================//
 export default function App() {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: key.googleMapKey,
+    googleMapsApiKey: googleMapKey,
     libraries,
   });
 
   const [markers, setMarkers] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
 
-  // console.log(selected)
+  const [jobSearchInput, setJobSearchInput] = React.useState('')
+  
+
+
   const onMapClick = React.useCallback((event) => {
     console.log(event)
-    // console.log(current)
+
     setMarkers((current) => 
-    [
+    
+  [
       ...current,
       {
         lat: event.latLng.lat(),
@@ -73,29 +85,62 @@ export default function App() {
         time: new Date(),
       },
     ]
-    );
-    // console.log(current)
+    
+      );
+
+      // console.log(current)
 
   }, []);
 //==========================================================================================//
 //==========================================================================================//
 
+
+
+
+//==========================================================================================//
+//==========================================================================================//
+
   const mapRef = React.useRef();
+
 //==========================================================================================//
 //==========================================================================================//
 
   const onMapLoad = React.useCallback((map) => {
+
     mapRef.current = map;
 
   }, []);
 //==========================================================================================//
 //==========================================================================================//
 
-  const panTo = React.useCallback(({lat, lng})=>{
+
+
+
+
+
+//==========================================================================================//
+//==========================================================================================//
+const panTo = React.useCallback(({lat, lng})=>{
     mapRef.current.panTo({lat, lng});
     // mapRef.current.setZoom(8);
     mapRef.current.setZoom(11);
   }, [])
+
+//==========================================================================================//
+//==========================================================================================//
+const handleOnJobSearch = async (event)=>{
+  console.log(event.target.value)
+ setJobSearchInput(event.target.value)
+}
+
+
+
+
+//==========================================================================================//
+//==========================================================================================//
+const jobSearchSubmit = async(event)=>{
+  console.log(event.target.value)
+}
 
 //==========================================================================================//
 //==========================================================================================//
@@ -116,7 +161,23 @@ return (
 
             
               <Search panTo={panTo} />           
-              <Locate panTo={panTo} />       
+              <Locate panTo={panTo} />    
+
+
+              <div className="job-search">
+              <input
+              
+              
+              placeholder="search Job"
+              onChange={handleOnJobSearch}
+              
+              >
+              </input>
+
+                <button onClick={jobSearchSubmit}>Search</button>
+              </div>
+
+
         </div>
 {/* //==========================================================================================// */}
 {/* //==========================================================================================// */}
@@ -135,7 +196,9 @@ return (
   {/* //==========================================================================================// */}
   {/* //==========================================================================================// */}
 
+
           {markers.map((marker) => (
+            
             <Marker
             key={marker.time.toISOString()}
             position={{ lat: marker.lat, lng: marker.lng }}
@@ -148,7 +211,7 @@ return (
             onClick={() => {
               setSelected(marker);
             }}
-            />
+            /> 
             ))}
   {/* //==========================================================================================// */}
   {/* //==========================================================================================// */}
@@ -173,7 +236,7 @@ return (
 
       <div className="product_list">
 
-        <Home />
+        <Product/>
       </div>
       
 
@@ -232,6 +295,9 @@ function Search({panTo}) {
   });
 //==========================================================================================//
 //==========================================================================================//
+
+//==========================================================================================//
+//==========================================================================================//
   return (
     <div className ="search">
 
@@ -278,7 +344,6 @@ function Search({panTo}) {
 
 
     
-   
     </div>
   );
 }

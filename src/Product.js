@@ -1,72 +1,140 @@
-import React from 'react';
+import React from "react";
 import "./Product.css";
-import axios from 'axios';
+import {adzunaAppID, adzunaAppKey} from "./key";
+import axios from "axios";
+import GoogleMap from "./App";
+import { Marker } from "@react-google-maps/api";
 
-
-
-
-
+// console.log(GoogleMap)
 
 export default class Product extends React.Component {
+state = {
+    jobs: [],
+    jobSearchInput: "",
+};
 
-state ={
-jobs: []
-}
 componentDidMount() {
 
-axios.get(`https://api.adzuna.com/v1/api/jobs/us/search/10?&where=11203&distance=20`)
-.then((response)=>{
-let results = response.data.results
+const search = async ()=>{
 
-console.log(results)
+    const jobList = await axios.get(
+        `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${adzunaAppID}&app_key=${adzunaAppKey}&results_per_page=10&what=javascript&sort_by=salary&salary_min=1&salary_include_unknown=1`
+        )
 
-this.setState({jobs: results})
-// 
+            let results = jobList.data.results;
+            
+            // console.log(results);
+            
+            this.setState({
+                jobs: results,
+            });
+            // const search = 
+            
+        // }
+        // );
+    }
+    search()
+}
+//==========================================================================================//
+//==========================================================================================//
+// handleOnJobSearch = async (event)=>{
+//     console.log(event)
+// }
 
 
-})}
-
-render(){
-
+//==========================================================================================//
+//==========================================================================================//
+render() {
     return (
-        <div >
-            <div 
-            className="product_info"
-            
-            >
+    <div>
+        <div className="product_info">
+        {this.state.jobs.length !== 0
+            ? this.state.jobs.map((jobs) => {
+                console.log(jobs.salary_max)
+                // if(jobs.salary_max !== undefined ||  jobs.salary_max !== ''){
+                //     return jobs.salary_max
+                // }
+                // if(jobs.salary_min !== undefined || ''){
+                //     console.log(jobs.salary_min)
+                //     return jobs.salary_min
+                // }
 
 
 
-                {this.state.jobs.length !== 0 
-                ? (this.state.jobs.map((jobs)=> {
-                    
-                    const{id,latitude, longitude, location, title, company, description, salary_max, salary_min} =jobs
-                    console.log(description.length)
-            
+                let {
+                id,
+                latitude,
+                longitude,
+                location,
+                title,
+                company,
+                description,
+                salary_max,
+                salary_min,
+                } = jobs;
 
-                    return (
-                        <div>
 
-                    <button id={id} className='product' onClick={()=>{console.log(latitude, longitude)}}>
-                        <div className="company_logo"> 💼 </div>
-                        <a className="title"><strong> {title} </strong></a>                          
-                        <a className="company_name">{company.display_name}</a>      
-                        <div className="location_name">{location.display_name}</div>        
-                    {/* <li className="job_description">{description}</li>             */}
-                    {/* <span>{salary_max}</span> */}
+                // if(salary_max !== undefined){
+                //     let salaryMax =salary_max
+                //     return salaryMax
+                // }
+                // console.log(salaryMax)
+
+                // salary_max.filter(value => value !== undefined)
+
+
+                //shorten description on preview
+                const summaryDescription = description.substring(0, 50);
+                const formatter = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2,
+                });
+                salary_max = formatter.format(salary_max); // "$1,000.00"
+                salary_min = formatter.format(salary_min); // "$1,000.00"
+
+//                 let noNan = salary_max.filter((nanValues)=> console.log(nanValues))
+// console.log(noNan)
+                function onProductClick() {
+                console.log(longitude);
+                // mark map with latitude and latitude
+                return (
+                    <GoogleMap>
+                    <div>{latitude}</div>
+                    </GoogleMap>
+                );
+                }
+
+                return (
+                <div>
+                    <button className="product" onClick={onProductClick}>
+                    <div className="company_logo"> 💼 </div>
+                    <a className="title">
+                        <strong> {title} </strong>
+                    </a>
+                    <a className="company_name">{company.display_name}</a>
+                    <div className="location_name">
+                        {location.display_name}
+                    </div>
+                    <li className="job_description">{summaryDescription}</li>
+                    {/* <li className="job_description">{description}</li>  */}
+                    <div className="salary">
+                        <span className="minimum">
+                        <strong>minimum salary: {salary_min}</strong>
+                        </span>
+                        <br />
+                        <br />
+                        <span className="maximum">
+                        <strong>maximum salary: {salary_max}</strong>
+                        </span>
+                    </div>
                     </button>
-                        </div>
-                    )
-                }))
-                :""}
-                    
-
-
-            </div>
-            
+                </div>
+                );
+            })
+            : ""}
         </div>
-    )
+    </div>
+    );
 }
-    
 }
-
