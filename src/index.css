@@ -49,7 +49,7 @@
 .job-search input {
     height: 2vh;
     padding: 10px;
-    margin-right: 0vw;
+    /* margin-left: 1vw; */
     /* border: none; */
     width: 15vw;
 }
@@ -76,6 +76,11 @@
 .product_list {
     grid-row: 1/ 9;
     grid-column: 2 / 3;
+    overflow: scroll;
+    width: 33vw;
+    height: 100vh;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
 }
 
 .product {

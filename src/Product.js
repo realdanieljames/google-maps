@@ -18,7 +18,7 @@ componentDidMount() {
 const search = async ()=>{
 
     const jobList = await axios.get(
-        `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${adzunaAppID}&app_key=${adzunaAppKey}&results_per_page=10&what=javascript&sort_by=salary&salary_min=1&salary_include_unknown=1`
+        `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${adzunaAppID}&app_key=${adzunaAppKey}&results_per_page=50&what=javascript&sort_by=salary&salary_min=1&salary_include_unknown=1`
         )
 
             let results = jobList.data.results;
@@ -50,7 +50,7 @@ render() {
         <div className="product_info">
         {this.state.jobs.length !== 0
             ? this.state.jobs.map((jobs) => {
-                console.log(jobs.salary_max)
+console.log(jobs)
                 // if(jobs.salary_max !== undefined ||  jobs.salary_max !== ''){
                 //     return jobs.salary_max
                 // }
@@ -69,6 +69,7 @@ render() {
                 title,
                 company,
                 description,
+                redirect_url,
                 salary_max,
                 salary_min,
                 } = jobs;
@@ -96,13 +97,9 @@ render() {
 //                 let noNan = salary_max.filter((nanValues)=> console.log(nanValues))
 // console.log(noNan)
                 function onProductClick() {
-                console.log(longitude);
-                // mark map with latitude and latitude
-                return (
-                    <GoogleMap>
-                    <div>{latitude}</div>
-                    </GoogleMap>
-                );
+
+                    window.open(redirect_url, '_blank')
+
                 }
 
                 return (
@@ -120,12 +117,12 @@ render() {
                     {/* <li className="job_description">{description}</li>  */}
                     <div className="salary">
                         <span className="minimum">
-                        <strong>minimum salary: {salary_min}</strong>
+                        minimum salary: <strong>{salary_min}</strong>
                         </span>
                         <br />
                         <br />
                         <span className="maximum">
-                        <strong>maximum salary: {salary_max}</strong>
+                       maximum salary: <strong> {salary_max}</strong>
                         </span>
                     </div>
                     </button>
